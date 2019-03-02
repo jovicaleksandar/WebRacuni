@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Result</h2>
+
+@{
+    if (ViewBag.user.loggedIn)
+    {
+        <p>
+            <br /><hr />
+            Uspesno ste se prijavili.<br /><hr />
+            Username: @ViewBag.user.username<br /><hr />
+        </p>
+
+        <a href="~/Login/SignOff">Odjavi se!</a>
+        <br /><hr />
+    }
+    else
+    {
+        <p>
+            Niste se uspesno prijavili.
+        </p>
+    }
+
+    <br /><hr />
+    <a href="~/Home/Index">Home Page</a>
+}

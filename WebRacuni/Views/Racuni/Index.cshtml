@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    body {
+        background: gray;
+    }
+</style>
+
+<h2>Racuni</h2>
+
+<form method="post" action="~/Racuni/AddRacun">
+    <table>
+        <tr>
+            <th>Broj racuna</th>
+            <td><input type="text" name="brojRacuna" required /></td>
+        </tr>
+        <tr>
+            <th>Tip racuna</th>
+            <td>
+                <select name="tipRacuna" required>
+                    @{
+                        foreach (string s in ViewBag.user.racuni.tipovi)
+                        {
+                            <option value="@s">@s</option>
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr><th>Raspolozivo stanje </th><td><input type="number" name="raspolozivoStanje" min="0" required /></td></tr>
+        <tr><th>Rezervisano stanje </th><td><input type="number" name="rezervisanoStanje" min="0" required /></td></tr>
+        <tr><th>Aktivan </th><td><input type="checkbox" value="true" name="aktivan"/></td></tr>
+        <tr><th>&nbsp;</th><td><input type="submit" value="Dodaj" /></td></tr>
+    </table>
+</form>
+
+<br /><hr />
+<table border="1" cellpadding="4" style="background-color:white">
+    <tr><th>Broj racuna</th><th>Tip racuna</th><th>Rezervisano</th><th>Raspolozivo</th><th>Ukupno</th><th>Aktivan</th><th>&nbsp;</th><th>&nbsp;</th></tr>
+    @{
+        foreach (Racun r in ViewBag.user.racuni.collection.Values)
+        {
+            string stanje = "";
+            <tr>
+                <td>@r.brojRacuna</td>
+                <td>@r.tipRacuna</td>
+                <td>@r.rezervisanoStanje</td>
+                <td>@r.raspolozivoStanje</td>
+                <td>@r.ukupnoStanje</td>
+                @if (r.aktivan)
+                {
+                    stanje = "Deaktiviraj";
+                    <td>Da</td>
+                }
+                else
+                {
+                    stanje = "Aktiviraj";
+                    <td>Ne</td>
+                }
+                <td>
+                    <form method="post" action="~/Racuni/Obrisi">
+                        <input type="text" name="key" value="@r.brojRacuna" hidden />
+                        <input type="submit" value="Obrisi" />
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="~/Racuni/PromenaStanja">
+                        <input type="text" name="key" value="@r.brojRacuna" hidden />
+                        <input type="submit" value="@stanje" />
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<br /><hr />
+<h2>Uplata</h2>
+
+<form method="post" action="~/Racuni/Uplata">
+    <table cellpadding="4">
+        <tr>
+            <th>Racun</th>
+            <td>
+                <select name="brojRacuna">
+                    @{
+                        foreach (string s in ViewBag.user.racuni.collection.Keys)
+                        {
+                            if (ViewBag.user.racuni.collection[s].aktivan)
+                            { 
+                                <option value="@s">@s</option>
+                            }
+                        }
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Iznos</th>
+            <td><input type="number" name="iznos" min="1" required /></td>
+            <th>&nbsp;</th>
+            <td><input type="submit" value="Uplati" /></td>
+        </tr>
+    </table>
+</form>
+
+<br /><hr />
+
+<a href="~/Login/SignOff" style="color:white">Odjavi se!</a>
